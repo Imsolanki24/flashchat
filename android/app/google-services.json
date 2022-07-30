@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "593234830765",
+    "project_id": "mychatapp-facba",
+    "storage_bucket": "mychatapp-facba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593234830765:android:03d229f17bb5187fc62d24",
+        "android_client_info": {
+          "package_name": "com.example.newflashchtapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593234830765-no9cqavpruibp2jrdp4fk5b7d26hgk6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT9iYszRtrLi7uWpueD20K0D5bzR3gnWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593234830765-no9cqavpruibp2jrdp4fk5b7d26hgk6r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593234830765:android:afb8242d6763a702c62d24",
+        "android_client_info": {
+          "package_name": "com.himanshu.newflashchtapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593234830765-no9cqavpruibp2jrdp4fk5b7d26hgk6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT9iYszRtrLi7uWpueD20K0D5bzR3gnWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593234830765-no9cqavpruibp2jrdp4fk5b7d26hgk6r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
