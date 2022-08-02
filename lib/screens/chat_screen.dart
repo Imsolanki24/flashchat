@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:newflashchtapp/constant.dart';
+import 'package:newflashchtapp/utilities/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
-  static const String id = 'chat_screen';
+  // static const String routeName = '/chat_screen';
+
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _firestore = FirebaseFirestore.instance;
+  final _fireStore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   late User loggedInUser;
   late String messageText;
@@ -25,19 +27,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void getCurrentUser() async {
     try {
-      final user = await _auth.currentUser!;
+      final user = _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
   
   void messagesStream ()async{
-   await for( var snapshot in _firestore.collection('messages').snapshots()){
+   await for( var snapshot in _fireStore.collection('messages').snapshots()){
      for(var message in snapshot.docs){
-       print(message.data());
+       debugPrint(message.data().toString());
      }
    }
   }
@@ -49,14 +51,14 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 messagesStream();
                 // _auth.signOut();
                 // Navigator.pop(context);
               }),
         ],
-        title: Text('⚡️Chat'),
+        title: const Text('⚡️Chat'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -65,10 +67,10 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
+              stream: _fireStore.collection('messages').snapshots(),
               builder:  (context ,  snapshot){
                 if (!snapshot.hasData){
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.blueAccent,
                     ),
@@ -103,12 +105,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
-                      _firestore.collection('messages').add({
+                      _fireStore.collection('messages').add({
                         'text' : messageText,
                         'sender' : loggedInUser.email,
                       });
                     },
-                    child: Text(
+                    child: const Text(
                       'Send',
                       style: kSendButtonTextStyle,
                     ),
