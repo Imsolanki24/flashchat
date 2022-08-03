@@ -1,48 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/material.dart';
 import 'package:newflashchtapp/component/rounded_button.dart';
 import 'package:newflashchtapp/screens/login_screen.dart';
 import 'package:newflashchtapp/screens/registration_screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
-  @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
-}
+class WelcomeScreen extends StatelessWidget {
+  // static const String routeName = '/welcome_screen';
 
-class _WelcomeScreenState extends State<WelcomeScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation animation;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
-
-    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
-        .animate(controller);
-
-    controller.forward();
-
-    controller.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: animation.value,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -53,16 +22,27 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               children: [
                 Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     child: Image.asset('images/logo.png'),
                     height: 60,
                   ),
                 ),
-                TypewriterAnimatedTextKit(
-                  text: ['Flash Chat'],
-                  textStyle:
-                      const TextStyle(fontSize: 45, fontWeight: FontWeight.w900),
-                ),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Flash Chat',
+                      textStyle: const TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      speed: const Duration(milliseconds: 200),
+                    ),
+                  ],
+                  totalRepeatCount: 4,
+                  pause: const Duration(milliseconds: 100),
+                  displayFullTextOnTap: true,
+                  stopPauseOnTap: true,
+                )
               ],
             ),
             const SizedBox(
@@ -70,7 +50,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             RoundedButton(
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
               },
               text: 'Login',
               color: Colors.blueAccent,
@@ -78,7 +62,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             RoundedButton(
                 text: 'Registration',
                 onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.id);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const RegistrationScreen(),
+                    ),
+                  );
                 },
                 color: Colors.blue)
           ],
