@@ -106,11 +106,13 @@ class ChatRepository {
 
         final result = ref.orderBy("created", descending: true).snapshots();
 
-        final data = result.map((event) => event.docs.map((e) {
-              final map = e.data();
-              return MessageModel.fromMap(map)
-                  .copyWith(isMe: map["senderId"] == user.uid);
-            }).toList());
+        final data = result.map(
+          (event) => event.docs.map((e) {
+            final map = e.data();
+            return MessageModel.fromMap(map)
+                .copyWith(isMe: map["senderId"] == user.uid);
+          }).toList(),
+        );
 
         return data;
       } else {

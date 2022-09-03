@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:newflashchtapp/component/circular_image.dart';
 import 'package:newflashchtapp/models/chat_room_model.dart';
 import 'package:newflashchtapp/models/message_model.dart';
 import 'package:newflashchtapp/models/user_model.dart';
@@ -27,12 +28,10 @@ class _ChatScreen2State extends State<ChatScreen2> {
   bool loadingChatRoom = false;
   late ChatRoomModel? _chatRoom;
   late UserModel? user;
-  late TextEditingController _messageController;
   late ChatRepository _repository;
 
   @override
   void initState() {
-    _messageController = TextEditingController();
     _repository = ChatRepository();
     setUpChatScreen(context);
     super.initState();
@@ -44,13 +43,7 @@ class _ChatScreen2State extends State<ChatScreen2> {
     user = await UserRepository().fetchUserFromChatRoom(_chatRoom!);
     setState(() => loadingChatRoom = false);
   }
-
-  @override
-  void dispose() {
-    _messageController.dispose();
-    super.dispose();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -64,8 +57,9 @@ class _ChatScreen2State extends State<ChatScreen2> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Icon(Icons.arrow_back_ios_new_rounded),
-              CircleAvatar(
-                backgroundImage: NetworkImage(widget.user.imageUrl),
+              SizedBox.square(
+                dimension: 40,
+                child: CircularImage(imageUrl: widget.user.imageUrl),
               ),
             ],
           ),
@@ -100,6 +94,7 @@ class _ChatScreen2State extends State<ChatScreen2> {
                 return ListView.builder(
                     reverse: true,
                     itemCount: _messages.length,
+                    addAutomaticKeepAlives: true,
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 75),
                     itemBuilder: (context, index) {
                       final message = _messages[index];
@@ -111,9 +106,7 @@ class _ChatScreen2State extends State<ChatScreen2> {
                           Container(
                             margin: const EdgeInsets.only(bottom: 6),
                             padding: const EdgeInsets.all(10),
-                            // alignment: message.isMe!
-                            //     ? Alignment.centerRight
-                            //     : Alignment.centerLeft,
+
                             color: message.isMe!
                                 ? Theme.of(context).primaryColor
                                 : Colors.grey,
@@ -134,39 +127,75 @@ class _ChatScreen2State extends State<ChatScreen2> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _messageController,
-                      decoration: const InputDecoration(
-                        hintText: 'Type message...',
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _repository.sendMessage(
-                          chatRoomId: widget.chatRoomId,
-                          message:
-                              MessageModel(message: _messageController.text));
-                      setState(() => _messageController.clear());
-                    },
-                    child: CircleAvatar(
-                      child: Transform.rotate(
-                        angle: 7 * pi / 4,
-                        child: const Icon(Icons.send),
-                      ),
-                    ),
-                  )
-                ],
+              child: SentMessageBox(
+                chatRoomId: widget.chatRoomId,
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SentMessageBox extends StatefulWidget {
+  const SentMessageBox({
+    Key? key,
+    required this.chatRoomId,
+  }) : super(key: key);
+
+  final String chatRoomId;
+
+  @override
+  State<SentMessageBox> createState() => _SentMessageBoxState();
+}
+
+class _SentMessageBoxState extends State<SentMessageBox> {
+  late TextEditingController _messageController;
+  late ChatRepository _repository;
+
+  @override
+  void initState() {
+    _messageController = TextEditingController();
+    _repository = ChatRepository();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: _messageController,
+            decoration: const InputDecoration(
+              hintText: 'Type message...',
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            _repository.sendMessage(
+                chatRoomId: widget.chatRoomId,
+                message: MessageModel(message: _messageController.text));
+            setState(() => _messageController.clear());
+          },
+          child: CircleAvatar(
+            child: Transform.rotate(
+              angle: 7 * pi / 4,
+              child: const Icon(Icons.send),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

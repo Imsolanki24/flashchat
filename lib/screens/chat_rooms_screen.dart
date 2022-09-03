@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newflashchtapp/component/circular_image.dart';
 
 import '../component/chat_room_chat_tile.dart';
 import '../models/chat_room_model.dart';
@@ -122,8 +123,7 @@ class ChatRoomsScreen extends StatelessWidget {
                               ));
                             });
                           },
-                          leading: CircleAvatar(
-                              backgroundImage: NetworkImage(user.imageUrl)),
+                          leading: CircularImage(imageUrl: user.imageUrl),
                           title: Text(user.name),
                         );
                       });

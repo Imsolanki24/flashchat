@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:newflashchtapp/component/circular_image.dart';
 
 import '../models/chat_room_model.dart';
 import '../models/user_model.dart';
@@ -22,9 +22,7 @@ class ChatRoomChatTile extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Colors.grey,
-              ),
+              leading: const CircularImage(imageUrl: ""),
               title: Container(
                 color: Colors.grey,
                 height: 10,
@@ -34,6 +32,13 @@ class ChatRoomChatTile extends StatelessWidget {
                 color: Colors.grey,
                 height: 10,
                 width: 150,
+              ),
+            );
+          }
+          if (snapshot.data == null || snapshot.hasError) {
+            return const ListTile(
+              title: Center(
+                child: Text("Something went wrong!!"),
               ),
             );
           }
@@ -49,9 +54,7 @@ class ChatRoomChatTile extends StatelessWidget {
                 ),
               );
             },
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(user.imageUrl),
-            ),
+            leading: CircularImage(imageUrl: user.imageUrl),
             title: Text(user.name),
             subtitle: Text(chatRoom.lastMessage!.message),
           );
